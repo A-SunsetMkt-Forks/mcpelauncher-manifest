@@ -1,6 +1,11 @@
 name: branch sync
 on:
   workflow_dispatch:
+    inputs:
+      UPDATE_IMGUI:
+        type: string
+      UPDATE_SDL:
+        type: string
   schedule:
   - cron:  '30 2 * * *'
 jobs:
@@ -22,7 +27,7 @@ jobs:
       run: |
         set -x
         dirs=( "mcpelauncher-ng" "mcpelauncher-qt6" )
-        common_submodules=( "logger" "base64" "file-util" "properties-parser" "simple-ipc" "daemon-utils" "msa-daemon-client" "eglut" "linux-gamepad" "game-window" "file-picker" "cll-telemetry" "minecraft-imported-symbols" "mcpelauncher-common" "mcpelauncher-core" "mcpelauncher-client" "arg-parser" "mcpelauncher-linux-bin" "epoll-shim" "osx-elf-header" "mcpelauncher-mac-bin" "android-support-headers" "libc-shim" "mcpelauncher-linker" "libjnivm" "sdl3" "imgui" )
+        common_submodules=( "logger" "base64" "file-util" "properties-parser" "simple-ipc" "daemon-utils" "msa-daemon-client" "eglut" "linux-gamepad" "game-window" "file-picker" "cll-telemetry" "minecraft-imported-symbols" "mcpelauncher-common" "mcpelauncher-core" "mcpelauncher-client" "arg-parser" "mcpelauncher-linux-bin" "epoll-shim" "osx-elf-header" "mcpelauncher-mac-bin" "android-support-headers" "libc-shim" "mcpelauncher-linker" "libjnivm" ${{ (inputs.UPDATE_SDL || vars.UPDATE_SDL) == '1' && '"sdl3"' || '' }} ${{ (inputs.UPDATE_IMGUI || vars.UPDATE_IMGUI) == '1' && '"imgui"' || '' }})
         # ui_submodules=("mcpelauncher-webview" "mcpelauncher-errorwindow")
         for dir in "${dirs[@]}"
         do
